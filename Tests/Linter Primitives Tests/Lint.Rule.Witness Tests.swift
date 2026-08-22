@@ -83,7 +83,7 @@ extension Lint.Rule.Test.Unit {
     let measured = Lint.Rule.`sketch noop`.observe(source, .warning)
     #expect(measured.findings.isEmpty)
     #expect(measured.coverage == .measured)
-    #expect(measured.applicable)
+    #expect(measured.applicability.isApplicable)
 
     let unmeasured = Lint.Rule(
       id: "requires semantics",
@@ -215,7 +215,7 @@ extension Lint.Rule.Test.Unit {
     let scoped = Lint.Rule.`sketch try optional`.filtered(toPaths: .including(["Sources/A"]))
     #expect(scoped.observe(inside, .warning).findings.count == 1)
     #expect(scoped.observe(outside, .warning).findings.count == 0)
-    #expect(!scoped.observe(outside, .warning).applicable)
+    #expect(!scoped.observe(outside, .warning).applicability.isApplicable)
   }
 
   @Test
