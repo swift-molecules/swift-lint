@@ -1,5 +1,5 @@
 extension Lint.Rule.Observation {
-  public enum Applicability: Sendable, Equatable {
+  public enum Applicability: Sendable, Hashable {
     case applicable
     case inapplicable
   }
