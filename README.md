@@ -1,4 +1,4 @@
-# Linter Primitives
+# Linter
 
 ![Development Status](https://img.shields.io/badge/status-active--development-blue.svg)
 
@@ -11,7 +11,7 @@ Foundation-free abstractions for building a Swift linter — the rule witness va
 A rule is *data*, not a protocol conformance: a `Lint.Rule` value pairs a typed identifier with a pure `findings` closure that walks a parsed syntax tree and emits `Diagnostic.Record` values at a severity the engine threads in. Rule packs publish rules as static members, so call sites read as natural English.
 
 ```swift
-import Linter_Primitives
+import Linter
 import SwiftSyntax
 
 extension Lint.Rule {
@@ -57,7 +57,7 @@ extension Lint.Rule {
 Activate rules in a layered configuration. The rules block is a plain `Array.Builder`, so it is declarative and control-flow-friendly; `configuration.rules.effective` flattens a parent chain with later layers overriding earlier ones per rule ID:
 
 ```swift
-import Linter_Primitives
+import Linter
 
 let configuration = Lint.Configuration(
     excluded: ["Tests/Fixtures", ".build"]
@@ -84,7 +84,7 @@ This package owns the portable declaration only. Scanning source comments and co
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/swift-primitives/swift-linter-primitives.git", branch: "main")
+    .package(url: "https://github.com/swift-molecules/swift-linter.git", branch: "main")
 ]
 ```
 
@@ -92,12 +92,12 @@ dependencies: [
 .target(
     name: "YourRulePack",
     dependencies: [
-        .product(name: "Linter Primitives", package: "swift-linter-primitives"),
+        .product(name: "Linter", package: "swift-linter"),
     ]
 )
 ```
 
-`Linter Primitives` re-exports `Source_Primitives`, `Diagnostic_Primitives`, `Tagged_Primitives`, `Tagged_Primitives_Standard_Library_Integration`, and `Standard_Library_Extensions`, so consumers reach `Source.Location`, `Diagnostic.Record`, and `Tagged` without importing them separately.
+`Linter` re-exports `Source`, `Diagnostic`, `Tagged`, `Tagged_Standard_Library_Integration`, and `Standard_Library_Extensions`, so consumers reach `Source.Location`, `Diagnostic.Record`, and `Tagged` without importing them separately.
 
 ---
 
@@ -107,8 +107,8 @@ Two library products. Concrete rules, filesystem walking, and reporting are L3 c
 
 | Product | Target | Purpose |
 |---------|--------|---------|
-| `Linter Primitives` | `Sources/Linter Primitives/` | The `Lint` namespace: `Lint.Rule` (the witness value) and its `Lint.Rule.ID`, `Lint.Rule.Severity`, `Lint.Rule.Configuration`, and `Lint.Rule.Bundle`; `Lint.Configuration` with its `rules` view and `effective` chain resolution; `Lint.Finding`, `Lint.Filter`, `Lint.Source.Parsed`, and `Lint.Visibility`. |
-| `Linter Primitives Test Support` | `Tests/Support/` | Re-exports the main target plus sketch rules that exercise the witness shape for test consumers. |
+| `Linter` | `Sources/Linter/` | The `Lint` namespace: `Lint.Rule` (the witness value) and its `Lint.Rule.ID`, `Lint.Rule.Severity`, `Lint.Rule.Configuration`, and `Lint.Rule.Bundle`; `Lint.Configuration` with its `rules` view and `effective` chain resolution; `Lint.Finding`, `Lint.Filter`, `Lint.Source.Parsed`, and `Lint.Visibility`. |
+| `Linter Test Support` | `Tests/Support/` | Re-exports the main target plus sketch rules that exercise the witness shape for test consumers. |
 
 Foundation-free.
 

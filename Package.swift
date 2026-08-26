@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "swift-linter-primitives",
+    name: "swift-linter",
     platforms: [
         .macOS(.v27),
         .iOS(.v27),
@@ -13,60 +13,60 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "Linter Primitives",
-            targets: ["Linter Primitives"]
+            name: "Linter",
+            targets: ["Linter"]
         ),
         .library(
-            name: "Linter Primitives Test Support",
-            targets: ["Linter Primitives Test Support"]
+            name: "Linter Test Support",
+            targets: ["Linter Test Support"]
         ),
     ],
     dependencies: [
         .package(
-            url: "https://github.com/swift-primitives/swift-source-primitives.git",
+            url: "https://github.com/swift-molecules/swift-source.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-primitives/swift-byte-primitives.git",
+            url: "https://github.com/swift-molecules/swift-byte.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-primitives/swift-diagnostic-primitives.git",
+            url: "https://github.com/swift-molecules/swift-diagnostic.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-primitives/swift-cardinal-primitives.git",
+            url: "https://github.com/swift-molecules/swift-cardinal.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-primitives/swift-tagged-primitives.git",
+            url: "https://github.com/swift-molecules/swift-tagged.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-primitives/swift-ownership-primitives.git",
+            url: "https://github.com/swift-molecules/swift-ownership.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-primitives/swift-standard-library-extensions.git",
+            url: "https://github.com/swift-molecules/swift-standard-library-extensions.git",
             branch: "main"
         ),
         .package(url: "https://github.com/swiftlang/swift-syntax.git", "602.0.0"..<"603.0.0"),
     ],
     targets: [
         .target(
-            name: "Linter Primitives",
+            name: "Linter",
             dependencies: [
-                .product(name: "Source Primitives", package: "swift-source-primitives"),
-                .product(name: "Diagnostic Primitives", package: "swift-diagnostic-primitives"),
-                .product(name: "Cardinal Primitives", package: "swift-cardinal-primitives"),
-                .product(name: "Tagged Primitives", package: "swift-tagged-primitives"),
+                .product(name: "Source", package: "swift-source"),
+                .product(name: "Diagnostic", package: "swift-diagnostic"),
+                .product(name: "Cardinal", package: "swift-cardinal"),
+                .product(name: "Tagged", package: "swift-tagged"),
                 .product(
-                    name: "Tagged Primitives Standard Library Integration",
-                    package: "swift-tagged-primitives"
+                    name: "Tagged Standard Library Integration",
+                    package: "swift-tagged"
                 ),
                 .product(
-                    name: "Ownership Immutable Primitives",
-                    package: "swift-ownership-primitives"
+                    name: "Ownership Immutable",
+                    package: "swift-ownership"
                 ),
                 .product(
                     name: "Standard Library Extensions",
@@ -76,31 +76,31 @@ let package = Package(
             ]
         ),
         .target(
-            name: "Linter Primitives Test Support",
+            name: "Linter Test Support",
             dependencies: [
-                .target(name: "Linter Primitives"),
+                .target(name: "Linter"),
                 .product(
-                    name: "Source Primitives Test Support",
-                    package: "swift-source-primitives"
+                    name: "Source Test Support",
+                    package: "swift-source"
                 ),
                 .product(
-                    name: "Diagnostic Primitives Test Support",
-                    package: "swift-diagnostic-primitives"
+                    name: "Diagnostic Test Support",
+                    package: "swift-diagnostic"
                 ),
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
             ],
             path: "Tests/Support"
         ),
         .testTarget(
-            name: "Linter Primitives Tests",
+            name: "Linter Tests",
             dependencies: [
-                .target(name: "Linter Primitives"),
-                .target(name: "Linter Primitives Test Support"),
-                .product(name: "Byte Primitives", package: "swift-byte-primitives"),
+                .target(name: "Linter"),
+                .target(name: "Linter Test Support"),
+                .product(name: "Byte", package: "swift-byte"),
                 .product(name: "SwiftParser", package: "swift-syntax"),
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
             ],
-            path: "Tests/Linter Primitives Tests"
+            path: "Tests/Linter Tests"
         ),
     ],
     swiftLanguageModes: [.v6]

@@ -1,7 +1,7 @@
 # .github/metadata.yaml
 description: "Foundation-free abstractions for building a Swift linter: the rule witness, typed rule identifier, layered configuration, and parsed-source bundle."
 topics:
-  - primitives
+  - molecules
   - linter
   - swift-syntax
 homepage: "https://swift-institute.org"

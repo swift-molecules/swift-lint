@@ -1,4 +1,4 @@
-public import Ownership_Immutable_Primitives
+public import Ownership_Immutable
 public import Standard_Library_Extensions
 
 extension Lint {

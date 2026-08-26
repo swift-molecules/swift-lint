@@ -1,5 +1,5 @@
-import Byte_Primitives
-import Linter_Primitives_Test_Support
+import Byte
+import Linter_Test_Support
 import SwiftParser
 import SwiftSyntax
 import Testing

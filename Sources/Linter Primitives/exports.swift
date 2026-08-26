@@ -1,5 +1,0 @@
-@_exported public import Diagnostic_Primitives
-@_exported public import Source_Primitives
-@_exported public import Standard_Library_Extensions
-@_exported public import Tagged_Primitives
-@_exported public import Tagged_Primitives_Standard_Library_Integration

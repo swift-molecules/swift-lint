@@ -1,4 +1,4 @@
-import Linter_Primitives_Test_Support
+import Linter_Test_Support
 import Testing
 
 extension Lint.Finding {
