@@ -47,7 +47,7 @@ let package = Package(
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-standard-library-extensions.git",
+            url: "https://github.com/swift-atoms/swift-standard-library-extensions.git",
             branch: "main"
         ),
         .package(url: "https://github.com/swiftlang/swift-syntax.git", "602.0.0"..<"603.0.0"),
