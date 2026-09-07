@@ -64,10 +64,7 @@ let package = Package(
                     name: "Tagged Standard Library Integration",
                     package: "swift-tagged"
                 ),
-                .product(
-                    name: "Ownership Immutable",
-                    package: "swift-ownership"
-                ),
+                .product(name: "Ownership", package: "swift-ownership"),
                 .product(
                     name: "Standard Library Extensions",
                     package: "swift-standard-library-extensions"
