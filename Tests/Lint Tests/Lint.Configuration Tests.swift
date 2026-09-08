@@ -1,4 +1,4 @@
-import Linter_Test_Support
+import Lint_Test_Support
 import Testing
 
 extension Lint.Configuration {

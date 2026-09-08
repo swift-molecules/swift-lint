@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "swift-linter",
+    name: "swift-lint",
     platforms: [
         .macOS(.v27),
         .iOS(.v27),
@@ -13,12 +13,12 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "Linter",
-            targets: ["Linter"]
+            name: "Lint",
+            targets: ["Lint"]
         ),
         .library(
-            name: "Linter Test Support",
-            targets: ["Linter Test Support"]
+            name: "Lint Test Support",
+            targets: ["Lint Test Support"]
         ),
     ],
     dependencies: [
@@ -54,14 +54,14 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Linter",
+            name: "Lint",
             dependencies: [
                 .product(name: "Source", package: "swift-source"),
                 .product(name: "Diagnostic", package: "swift-diagnostic"),
                 .product(name: "Cardinal", package: "swift-cardinal"),
                 .product(name: "Tagged", package: "swift-tagged"),
                 .product(
-                    name: "Tagged Standard Library Integration",
+                    name: "Tagged",
                     package: "swift-tagged"
                 ),
                 .product(name: "Ownership", package: "swift-ownership"),
@@ -73,29 +73,22 @@ let package = Package(
             ]
         ),
         .target(
-            name: "Linter Test Support",
+            name: "Lint Test Support",
             dependencies: [
-                .target(name: "Linter"),
-                .product(
-                    name: "Source Test Support",
-                    package: "swift-source"
-                ),
-                .product(
-                    name: "Diagnostic Test Support",
-                    package: "swift-diagnostic"
-                ),
+                .target(name: "Lint"),
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
             ],
             path: "Tests/Support"
         ),
         .testTarget(
-            name: "Linter Tests",
+            name: "Lint Tests",
             dependencies: [
+                .target(name: "Lint Test Support"),
                 .product(name: "Byte", package: "swift-byte"),
                 .product(name: "SwiftParser", package: "swift-syntax"),
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
             ],
-            path: "Tests/Linter Tests"
+            path: "Tests/Lint Tests"
         ),
     ],
     swiftLanguageModes: [.v6]
