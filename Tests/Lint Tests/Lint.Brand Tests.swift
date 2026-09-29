@@ -25,7 +25,7 @@ extension Lint.Brand.Test {
     let id = manager.register(
       fileID: "TestModule/Test.swift",
       filePath: "Test.swift",
-      content: text.utf8.map(Byte.init)
+      content: text.utf8.map(Byte.init(bitPattern:))
     )
     return Lint.Source.Parsed(
       file: manager.file(for: id),

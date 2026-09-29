@@ -1,5 +1,6 @@
 import Lint_Test_Support
 import Testing
+import Text
 
 extension Lint.Finding {
   @Suite

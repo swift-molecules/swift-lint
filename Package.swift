@@ -27,6 +27,10 @@ let package = Package(
             branch: "main"
         ),
         .package(
+            url: "https://github.com/swift-atoms/swift-text.git",
+            branch: "main"
+        ),
+        .package(
             url: "https://github.com/swift-atoms/swift-byte.git",
             branch: "main"
         ),
@@ -85,6 +89,7 @@ let package = Package(
             dependencies: [
                 .target(name: "Lint Test Support"),
                 .product(name: "Byte", package: "swift-byte"),
+                .product(name: "Text", package: "swift-text"),
                 .product(name: "SwiftParser", package: "swift-syntax"),
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
             ],
