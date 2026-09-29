@@ -8,7 +8,7 @@ extension Lint.Syntax {
 extension Lint.Syntax.Scope {
 
   @inlinable
-  public static func isTopLevel(_ node: some SyntaxProtocol) -> Swift.Bool {
+  public static func isTopLevel(_ node: some SyntaxProtocol) -> Swift::Bool {
     var current: Syntax? = Syntax(node).parent
     while let ancestor = current {
       if ancestor.is(SourceFileSyntax.self) {

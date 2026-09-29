@@ -5,5 +5,5 @@ extension Lint {
 
 extension Lint.Source {
 
-  public typealias Path = Tagged<Lint.Source, Swift.String>
+  public typealias Path = Tagged<Lint.Source, Swift::String>
 }

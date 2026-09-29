@@ -138,14 +138,14 @@ extension Lint.Visibility.Test.Effective {
 }
 
 private func firstDeclVisibility(
-  in source: Swift.String,
-  named name: Swift.String
+  in source: Swift::String,
+  named name: Swift::String
 ) -> Lint.Visibility? {
   let tree = Parser.parse(source: source)
   return findNamedDecl(in: Syntax(tree), name: name).map { Lint.Visibility.effective(of: $0) }
 }
 
-private func findNamedDecl(in node: Syntax, name: Swift.String) -> Syntax? {
+private func findNamedDecl(in node: Syntax, name: Swift::String) -> Syntax? {
   if let function = node.as(FunctionDeclSyntax.self), function.name.text == name {
     return Syntax(function)
   }

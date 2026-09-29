@@ -1,7 +1,7 @@
 extension Lint.Rule {
   public struct Control: Hashable, Sendable {
     public let id: ID
-    public let source: Swift.String
+    public let source: Swift::String
     public let path: Lint.Source.Path
     public let expectation: Expectation
     public let applicability: Lint.Rule.Observation.Applicability
@@ -9,7 +9,7 @@ extension Lint.Rule {
     @inlinable
     public init(
       id: ID,
-      source: Swift.String,
+      source: Swift::String,
       path: Lint.Source.Path,
       expectation: Expectation,
       applicability: Lint.Rule.Observation.Applicability = .applicable

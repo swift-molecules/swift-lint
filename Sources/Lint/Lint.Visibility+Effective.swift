@@ -36,7 +36,7 @@ extension Lint.Visibility {
       if let modifiers = modifiers(of: candidate),
         let declared = declared(in: modifiers)
       {
-        minimum = minimum.map { Swift.min($0, declared) } ?? declared
+        minimum = minimum.map { Swift::min($0, declared) } ?? declared
       }
       cursor = candidate.parent
     }

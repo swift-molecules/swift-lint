@@ -34,7 +34,7 @@ extension Lint.Rule.Test {
 extension Lint.Rule.Test.Unit {
 
   private func parsedSource(
-    _ text: Swift.String,
+    _ text: Swift::String,
     path: Lint.Source.Path = "Sources/Test/Test.swift"
   ) -> Lint.Source.Parsed {
     let tree = Parser.parse(source: text)

@@ -14,9 +14,9 @@ extension Lint.Finding {
 extension Lint.Finding.Test.Unit {
 
   private static func fixtureRecord(
-    identifier: Swift.String = "fixture rule",
-    line: Swift.Int = 1,
-    column: Swift.Int = 1
+    identifier: Swift::String = "fixture rule",
+    line: Swift::Int = 1,
+    column: Swift::Int = 1
   ) -> Diagnostic.Record {
     Diagnostic.Record(
       location: Source.Location(

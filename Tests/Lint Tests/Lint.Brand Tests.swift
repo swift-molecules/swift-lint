@@ -16,8 +16,8 @@ extension Lint.Brand {
 extension Lint.Brand.Test {
 
   static func parsed(
-    _ text: Swift.String,
-    types: Swift.Set<Swift.String>
+    _ text: Swift::String,
+    types: Swift::Set<Swift::String>
   ) -> Lint.Source.Parsed {
     let tree = Parser.parse(source: text)
     let converter = SourceLocationConverter(fileName: "Test.swift", tree: tree)

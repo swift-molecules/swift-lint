@@ -7,7 +7,7 @@ extension Lint {
 
 extension Lint.Brand {
 
-  public static let vocabulary: Swift.Set<Swift.String> = [
+  public static let vocabulary: Swift::Set<Swift::String> = [
     "Cardinal",
     "Ordinal",
     "Cyclic",
@@ -15,8 +15,8 @@ extension Lint.Brand {
     "Carrier",
   ]
 
-  public static func types(in tree: SourceFileSyntax) -> Swift.Set<Swift.String> {
-    var names: Swift.Set<Swift.String> = []
+  public static func types(in tree: SourceFileSyntax) -> Swift::Set<Swift::String> {
+    var names: Swift::Set<Swift::String> = []
     for statement in tree.statements {
       let item = statement.item
       if let decl = item.as(StructDeclSyntax.self) {
@@ -35,9 +35,9 @@ extension Lint.Brand {
   }
 
   public static func owned(
-    _ brands: Swift.Set<Swift.String>,
+    _ brands: Swift::Set<Swift::String>,
     in source: borrowing Lint.Source.Parsed
-  ) -> Swift.Bool {
+  ) -> Swift::Bool {
     !brands.isDisjoint(with: source.types)
   }
 }

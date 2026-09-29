@@ -1,6 +1,6 @@
 extension Lint {
 
-  public enum Visibility: Swift.String, Sendable, Hashable, Codable, Comparable, CaseIterable {
+  public enum Visibility: Swift::String, Sendable, Hashable, Codable, Comparable, CaseIterable {
     case `public`
     case `package`
     case `internal`
@@ -17,7 +17,7 @@ extension Lint.Visibility {
   }
 
   @inlinable
-  public var ordinal: Swift.Int {
+  public var ordinal: Swift::Int {
     switch self {
     case .public: return 4
     case .package: return 3
@@ -28,7 +28,7 @@ extension Lint.Visibility {
   }
 
   @inlinable
-  public var token: Swift.String {
+  public var token: Swift::String {
     switch self {
     case .public: "public"
     case .package: "package"

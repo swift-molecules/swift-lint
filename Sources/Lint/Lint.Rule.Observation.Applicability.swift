@@ -7,5 +7,5 @@ extension Lint.Rule.Observation {
 
 extension Lint.Rule.Observation.Applicability {
   @inlinable
-  public var isApplicable: Swift.Bool { self == .applicable }
+  public var isApplicable: Swift::Bool { self == .applicable }
 }

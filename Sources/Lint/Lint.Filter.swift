@@ -16,7 +16,7 @@ extension Lint {
 
 extension Lint.Filter {
 
-  public typealias Prefix = Tagged<Lint.Filter, Swift.String>
+  public typealias Prefix = Tagged<Lint.Filter, Swift::String>
 
   public static let all: Lint.Filter = Lint.Filter()
 
@@ -31,7 +31,7 @@ extension Lint.Filter {
   }
 
   @inlinable
-  public func matches(sourcePath: Lint.Source.Path) -> Swift.Bool {
+  public func matches(sourcePath: Lint.Source.Path) -> Swift::Bool {
     let pathString = sourcePath.underlying
     if !included.isEmpty {
       var anyIncluded = false
