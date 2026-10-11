@@ -30,17 +30,36 @@ extension Lint.Visibility {
 
   @inlinable
   public static func effective(of node: Syntax) -> Lint.Visibility {
-    var minimum: Lint.Visibility?
-    var cursor: Syntax? = node
+    guard let modifiers = modifiers(of: node) else {
+      return enclosingDeclaration(of: node).map(effective(of:)) ?? .internal
+    }
+    if node.is(ExtensionDeclSyntax.self) {
+      return declared(in: modifiers) ?? .public
+    }
+    let container = enclosingDeclaration(of: node)
+    let own = declared(in: modifiers) ?? defaultVisibility(in: container)
+    return container.map { Swift::min(own, effective(of: $0)) } ?? own
+  }
+
+  @usableFromInline
+  static func enclosingDeclaration(of node: Syntax) -> Syntax? {
+    var cursor = node.parent
     while let candidate = cursor {
-      if let modifiers = modifiers(of: candidate),
-        let declared = declared(in: modifiers)
-      {
-        minimum = minimum.map { Swift::min($0, declared) } ?? declared
-      }
+      if modifiers(of: candidate) != nil { return candidate }
       cursor = candidate.parent
     }
-    return minimum ?? .internal
+    return nil
+  }
+
+  @usableFromInline
+  static func defaultVisibility(in container: Syntax?) -> Lint.Visibility {
+    if let decl = container?.as(ExtensionDeclSyntax.self) {
+      declared(in: decl.modifiers) ?? .internal
+    } else if let decl = container?.as(ProtocolDeclSyntax.self) {
+      declared(in: decl.modifiers) ?? .internal
+    } else {
+      .internal
+    }
   }
 
   @usableFromInline

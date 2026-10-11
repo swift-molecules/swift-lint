@@ -165,3 +165,57 @@ private func findNamedDecl(in node: Syntax, name: Swift::String) -> Syntax? {
   }
   return nil
 }
+
+extension Lint.Visibility.Test.Effective {
+  @Test
+  func `Bare member of a public struct is internal`() {
+    let source = """
+      public struct Header {
+          static var field: Int { 0 }
+      }
+      """
+    #expect(firstDeclVisibility(in: source, named: "field") == .internal)
+  }
+
+  @Test
+  func `Bare member of a public struct is internal in an extension too`() {
+    let source = """
+      extension Header {
+          static var field: Int { 0 }
+      }
+      """
+    #expect(firstDeclVisibility(in: source, named: "field") == .internal)
+  }
+
+  @Test
+  func `Bare member of a public extension is public`() {
+    let source = """
+      public extension Header {
+          func field() {}
+      }
+      """
+    #expect(firstDeclVisibility(in: source, named: "field") == .public)
+  }
+
+  @Test
+  func `Public member of an internal nested type is internal`() {
+    let source = """
+      public struct Outer {
+          struct Inner {
+              public func field() {}
+          }
+      }
+      """
+    #expect(firstDeclVisibility(in: source, named: "field") == .internal)
+  }
+
+  @Test
+  func `Requirement of a public protocol is public`() {
+    let source = """
+      public protocol Keyed {
+          func field()
+      }
+      """
+    #expect(firstDeclVisibility(in: source, named: "field") == .public)
+  }
+}
