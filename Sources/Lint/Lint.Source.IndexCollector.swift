@@ -84,6 +84,15 @@ extension Lint.Source {
         $0.decl.as(AssociatedTypeDeclSyntax.self)?.name.text
       }
       index.associatedTypes[node.name.text, default: []].formUnion(names)
+      let members = node.memberBlock.members.flatMap { member -> [Swift::String] in
+        if let variable = member.decl.as(VariableDeclSyntax.self) {
+          return variable.bindings.compactMap { $0.pattern.as(IdentifierPatternSyntax.self)?.identifier.text }
+        }
+        if let function = member.decl.as(FunctionDeclSyntax.self) { return [function.name.text] }
+        if let subscriptDecl = member.decl.as(SubscriptDeclSyntax.self) { return [subscriptDecl.subscriptKeyword.text] }
+        return []
+      }
+      index.requirements[node.name.text, default: []].formUnion(members)
       recordConformances(of: node.name.text, node.inheritanceClause)
       return .visitChildren
     }

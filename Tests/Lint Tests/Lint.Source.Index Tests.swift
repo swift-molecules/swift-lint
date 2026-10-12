@@ -62,3 +62,15 @@ extension Lint.Source.Index.Test.`Edge Case` {
     #expect(!index.witnessesAssociatedType(named: "Key", on: "Sample"))
   }
 }
+
+extension Lint.Source.Index.Test.Unit {
+  @Test
+  func `a member that witnesses a protocol requirement is found`() {
+    let index = Lint.Source.Index.of(
+      "public protocol _OptionalProtocol<Wrapped> { associatedtype Wrapped; var _wrapped: Wrapped? { get } }",
+      "extension Optional: _OptionalProtocol { public var _wrapped: Wrapped? { self } }"
+    )
+    #expect(index.witnessesRequirement(named: "_wrapped", on: "Optional"))
+    #expect(!index.witnessesRequirement(named: "_backing", on: "Optional"))
+  }
+}

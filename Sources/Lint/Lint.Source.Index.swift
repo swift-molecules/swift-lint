@@ -10,15 +10,19 @@ extension Lint.Source {
 
     public var conformances: [Swift::String: Swift::Set<Swift::String>]
 
+    public var requirements: [Swift::String: Swift::Set<Swift::String>]
+
     @inlinable
     public init(
       valueGenericTypes: Swift::Set<Swift::String> = [],
       associatedTypes: [Swift::String: Swift::Set<Swift::String>] = [:],
-      conformances: [Swift::String: Swift::Set<Swift::String>] = [:]
+      conformances: [Swift::String: Swift::Set<Swift::String>] = [:],
+      requirements: [Swift::String: Swift::Set<Swift::String>] = [:]
     ) {
       self.valueGenericTypes = valueGenericTypes
       self.associatedTypes = associatedTypes
       self.conformances = conformances
+      self.requirements = requirements
     }
   }
 }
@@ -35,6 +39,7 @@ extension Lint.Source.Index {
     valueGenericTypes.formUnion(other.valueGenericTypes)
     associatedTypes.merge(other.associatedTypes) { $0.union($1) }
     conformances.merge(other.conformances) { $0.union($1) }
+    requirements.merge(other.requirements) { $0.union($1) }
   }
 
   public func protocols(of type: Swift::String) -> Swift::Set<Swift::String> {
@@ -49,14 +54,24 @@ extension Lint.Source.Index {
     named name: Swift::String,
     on type: Swift::String
   ) -> Swift::Bool {
+    reachableProtocols(of: type).contains { associatedTypes[$0]?.contains(name) ?? false }
+  }
+
+  public func witnessesRequirement(
+    named name: Swift::String,
+    on type: Swift::String
+  ) -> Swift::Bool {
+    reachableProtocols(of: type).contains { requirements[$0]?.contains(name) ?? false }
+  }
+
+  public func reachableProtocols(of type: Swift::String) -> Swift::Set<Swift::String> {
     var pending = Swift::Array(protocols(of: type))
     var seen: Swift::Set<Swift::String> = []
     while let next = pending.popLast() {
       guard seen.insert(next).inserted else { continue }
-      if associatedTypes[next]?.contains(name) ?? false { return true }
       pending.append(contentsOf: conformances[next] ?? [])
     }
-    return false
+    return seen
   }
 
   @usableFromInline
