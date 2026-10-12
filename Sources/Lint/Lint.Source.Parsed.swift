@@ -14,19 +14,23 @@ extension Lint.Source {
 
     public let types: Swift::Set<Swift::String>
 
+    public let index: Lint.Source.Index
+
     @inlinable
     public init(
       file: Source.File,
       path: Lint.Source.Path,
       tree: SourceFileSyntax,
       converter: SourceLocationConverter,
-      types: Swift::Set<Swift::String> = []
+      types: Swift::Set<Swift::String> = [],
+      index: Lint.Source.Index = .init()
     ) {
       self.file = file
       self.path = path
       self.tree = tree
       self.converter = converter
       self.types = types
+      self.index = index
     }
   }
 }
