@@ -74,3 +74,15 @@ extension Lint.Source.Index.Test.Unit {
     #expect(!index.witnessesRequirement(named: "_backing", on: "Optional"))
   }
 }
+
+extension Lint.Source.Index.Test.Unit {
+  @Test
+  func `a read license survives a merge with files that carry none`() {
+    var index = Lint.Source.Index(license: .text("Apache License"))
+    index.merge(.collect(from: Parser.parse(source: "struct A {}")))
+    #expect(index.license == .text("Apache License"))
+    var empty = Lint.Source.Index()
+    empty.merge(Lint.Source.Index(license: .absent))
+    #expect(empty.license == .absent)
+  }
+}

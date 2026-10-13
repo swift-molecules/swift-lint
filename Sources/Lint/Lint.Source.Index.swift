@@ -12,17 +12,21 @@ extension Lint.Source {
 
     public var requirements: [Swift::String: Swift::Set<Swift::String>]
 
+    public var license: License
+
     @inlinable
     public init(
       valueGenericTypes: Swift::Set<Swift::String> = [],
       associatedTypes: [Swift::String: Swift::Set<Swift::String>] = [:],
       conformances: [Swift::String: Swift::Set<Swift::String>] = [:],
-      requirements: [Swift::String: Swift::Set<Swift::String>] = [:]
+      requirements: [Swift::String: Swift::Set<Swift::String>] = [:],
+      license: License = .unread
     ) {
       self.valueGenericTypes = valueGenericTypes
       self.associatedTypes = associatedTypes
       self.conformances = conformances
       self.requirements = requirements
+      self.license = license
     }
   }
 }
@@ -40,6 +44,7 @@ extension Lint.Source.Index {
     associatedTypes.merge(other.associatedTypes) { $0.union($1) }
     conformances.merge(other.conformances) { $0.union($1) }
     requirements.merge(other.requirements) { $0.union($1) }
+    if license == .unread { license = other.license }
   }
 
   public func protocols(of type: Swift::String) -> Swift::Set<Swift::String> {
