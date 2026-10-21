@@ -2,99 +2,99 @@ public import SwiftSyntax
 
 extension Lint.Source {
 
-  public struct Index: Sendable, Equatable {
+    public struct Index: Sendable, Equatable {
 
-    public var valueGenericTypes: Swift::Set<Swift::String>
+        public var valueGenericTypes: Swift::Set<Swift::String>
 
-    public var associatedTypes: [Swift::String: Swift::Set<Swift::String>]
+        public var associatedTypes: [Swift::String: Swift::Set<Swift::String>]
 
-    public var conformances: [Swift::String: Swift::Set<Swift::String>]
+        public var conformances: [Swift::String: Swift::Set<Swift::String>]
 
-    public var requirements: [Swift::String: Swift::Set<Swift::String>]
+        public var requirements: [Swift::String: Swift::Set<Swift::String>]
 
-    public var license: License
+        public var license: License
 
-    @inlinable
-    public init(
-      valueGenericTypes: Swift::Set<Swift::String> = [],
-      associatedTypes: [Swift::String: Swift::Set<Swift::String>] = [:],
-      conformances: [Swift::String: Swift::Set<Swift::String>] = [:],
-      requirements: [Swift::String: Swift::Set<Swift::String>] = [:],
-      license: License = .unread
-    ) {
-      self.valueGenericTypes = valueGenericTypes
-      self.associatedTypes = associatedTypes
-      self.conformances = conformances
-      self.requirements = requirements
-      self.license = license
+        @inlinable
+        public init(
+            valueGenericTypes: Swift::Set<Swift::String> = [],
+            associatedTypes: [Swift::String: Swift::Set<Swift::String>] = [:],
+            conformances: [Swift::String: Swift::Set<Swift::String>] = [:],
+            requirements: [Swift::String: Swift::Set<Swift::String>] = [:],
+            license: License = .unread
+        ) {
+            self.valueGenericTypes = valueGenericTypes
+            self.associatedTypes = associatedTypes
+            self.conformances = conformances
+            self.requirements = requirements
+            self.license = license
+        }
     }
-  }
 }
 
 extension Lint.Source.Index {
 
-  public static func collect(from tree: SourceFileSyntax) -> Self {
-    let collector = Lint.Source.IndexCollector(viewMode: .sourceAccurate)
-    collector.walk(tree)
-    return collector.index
-  }
-
-  public mutating func merge(_ other: Self) {
-    valueGenericTypes.formUnion(other.valueGenericTypes)
-    associatedTypes.merge(other.associatedTypes) { $0.union($1) }
-    conformances.merge(other.conformances) { $0.union($1) }
-    requirements.merge(other.requirements) { $0.union($1) }
-    if license == .unread { license = other.license }
-  }
-
-  public func protocols(of type: Swift::String) -> Swift::Set<Swift::String> {
-    conformances[type] ?? conformances[Self.leaf(of: type)] ?? []
-  }
-
-  public func isValueGeneric(_ type: Swift::String) -> Swift::Bool {
-    valueGenericTypes.contains(type) || valueGenericTypes.contains(Self.leaf(of: type))
-  }
-
-  public func witnessesAssociatedType(
-    named name: Swift::String,
-    on type: Swift::String
-  ) -> Swift::Bool {
-    reachableProtocols(of: type).contains { associatedTypes[$0]?.contains(name) ?? false }
-  }
-
-  public func witnessesRequirement(
-    named name: Swift::String,
-    on type: Swift::String
-  ) -> Swift::Bool {
-    reachableProtocols(of: type).contains { requirements[$0]?.contains(name) ?? false }
-  }
-
-  public func reachableProtocols(of type: Swift::String) -> Swift::Set<Swift::String> {
-    var pending = Swift::Array(protocols(of: type))
-    var seen: Swift::Set<Swift::String> = []
-    while let next = pending.popLast() {
-      guard seen.insert(next).inserted else { continue }
-      pending.append(contentsOf: conformances[next] ?? [])
+    public static func collect(from tree: SourceFileSyntax) -> Self {
+        let collector = Lint.Source.IndexCollector(viewMode: .sourceAccurate)
+        collector.walk(tree)
+        return collector.index
     }
-    return seen
-  }
 
-  @usableFromInline
-  internal static func leaf(of type: Swift::String) -> Swift::String {
-    type.split(separator: ".").last.map(Swift::String.init) ?? type
-  }
+    public mutating func merge(_ other: Self) {
+        valueGenericTypes.formUnion(other.valueGenericTypes)
+        associatedTypes.merge(other.associatedTypes) { $0.union($1) }
+        conformances.merge(other.conformances) { $0.union($1) }
+        requirements.merge(other.requirements) { $0.union($1) }
+        if license == .unread { license = other.license }
+    }
 
-  @usableFromInline
-  internal static func spelling(of type: TypeSyntax) -> Swift::String {
-    if let identifier = type.as(IdentifierTypeSyntax.self) {
-      return identifier.name.text
+    public func protocols(of type: Swift::String) -> Swift::Set<Swift::String> {
+        conformances[type] ?? conformances[Self.leaf(of: type)] ?? []
     }
-    if let member = type.as(MemberTypeSyntax.self) {
-      return spelling(of: member.baseType) + "." + member.name.text
+
+    public func isValueGeneric(_ type: Swift::String) -> Swift::Bool {
+        valueGenericTypes.contains(type) || valueGenericTypes.contains(Self.leaf(of: type))
     }
-    if let attributed = type.as(AttributedTypeSyntax.self) {
-      return spelling(of: attributed.baseType)
+
+    public func witnessesAssociatedType(
+        named name: Swift::String,
+        on type: Swift::String
+    ) -> Swift::Bool {
+        reachableProtocols(of: type).contains { associatedTypes[$0]?.contains(name) ?? false }
     }
-    return type.trimmedDescription
-  }
+
+    public func witnessesRequirement(
+        named name: Swift::String,
+        on type: Swift::String
+    ) -> Swift::Bool {
+        reachableProtocols(of: type).contains { requirements[$0]?.contains(name) ?? false }
+    }
+
+    public func reachableProtocols(of type: Swift::String) -> Swift::Set<Swift::String> {
+        var pending = Swift::Array(protocols(of: type))
+        var seen: Swift::Set<Swift::String> = []
+        while let next = pending.popLast() {
+            guard seen.insert(next).inserted else { continue }
+            pending.append(contentsOf: conformances[next] ?? [])
+        }
+        return seen
+    }
+
+    @usableFromInline
+    internal static func leaf(of type: Swift::String) -> Swift::String {
+        type.split(separator: ".").last.map(Swift::String.init) ?? type
+    }
+
+    @usableFromInline
+    internal static func spelling(of type: TypeSyntax) -> Swift::String {
+        if let identifier = type.as(IdentifierTypeSyntax.self) {
+            return identifier.name.text
+        }
+        if let member = type.as(MemberTypeSyntax.self) {
+            return spelling(of: member.baseType) + "." + member.name.text
+        }
+        if let attributed = type.as(AttributedTypeSyntax.self) {
+            return spelling(of: attributed.baseType)
+        }
+        return type.trimmedDescription
+    }
 }

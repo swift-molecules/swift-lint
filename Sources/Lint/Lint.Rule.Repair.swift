@@ -1,4 +1,4 @@
 extension Lint.Rule {
 
-  public enum Repair {}
+    public enum Repair {}
 }

@@ -1,11 +1,11 @@
 extension Lint.Source.Index {
 
-  public enum License: Sendable, Hashable {
+    public enum License: Sendable, Hashable {
 
-    case unread
+        case unread
 
-    case absent
+        case absent
 
-    case text(Swift::String)
-  }
+        case text(Swift::String)
+    }
 }

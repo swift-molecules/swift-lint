@@ -1,9 +1,9 @@
 extension Lint {
 
-  public enum Source {}
+    public enum Source {}
 }
 
 extension Lint.Source {
 
-  public typealias Path = Tagged<Lint.Source, Swift::String>
+    public typealias Path = Tagged<Lint.Source, Swift::String>
 }

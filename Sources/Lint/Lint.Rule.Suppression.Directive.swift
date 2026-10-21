@@ -1,9 +1,9 @@
 extension Lint.Rule.Suppression {
 
-  public enum Directive: Sendable, Equatable {
+    public enum Directive: Sendable, Equatable {
 
-    case next
+        case next
 
-    case line
-  }
+        case line
+    }
 }

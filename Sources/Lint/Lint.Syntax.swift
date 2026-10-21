@@ -1,4 +1,4 @@
 extension Lint {
 
-  public enum Syntax {}
+    public enum Syntax {}
 }

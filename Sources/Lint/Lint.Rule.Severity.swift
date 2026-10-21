@@ -1,12 +1,12 @@
 extension Lint.Rule {
 
-  public struct Severity: Sendable {
+    public struct Severity: Sendable {
 
-    public let `default`: Diagnostic.Severity
+        public let `default`: Diagnostic.Severity
 
-    @inlinable
-    public init(default severity: Diagnostic.Severity) {
-      self.default = severity
+        @inlinable
+        public init(default severity: Diagnostic.Severity) {
+            self.default = severity
+        }
     }
-  }
 }

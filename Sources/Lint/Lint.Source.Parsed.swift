@@ -2,35 +2,35 @@ public import SwiftSyntax
 
 extension Lint.Source {
 
-  public struct Parsed: ~Copyable, Sendable {
+    public struct Parsed: ~Copyable, Sendable {
 
-    public let file: Source.File
+        public let file: Source.File
 
-    public let path: Lint.Source.Path
+        public let path: Lint.Source.Path
 
-    public let tree: SourceFileSyntax
+        public let tree: SourceFileSyntax
 
-    public let converter: SourceLocationConverter
+        public let converter: SourceLocationConverter
 
-    public let types: Swift::Set<Swift::String>
+        public let types: Swift::Set<Swift::String>
 
-    public let index: Lint.Source.Index
+        public let index: Lint.Source.Index
 
-    @inlinable
-    public init(
-      file: Source.File,
-      path: Lint.Source.Path,
-      tree: SourceFileSyntax,
-      converter: SourceLocationConverter,
-      types: Swift::Set<Swift::String> = [],
-      index: Lint.Source.Index = .init()
-    ) {
-      self.file = file
-      self.path = path
-      self.tree = tree
-      self.converter = converter
-      self.types = types
-      self.index = index
+        @inlinable
+        public init(
+            file: Source.File,
+            path: Lint.Source.Path,
+            tree: SourceFileSyntax,
+            converter: SourceLocationConverter,
+            types: Swift::Set<Swift::String> = [],
+            index: Lint.Source.Index = .init()
+        ) {
+            self.file = file
+            self.path = path
+            self.tree = tree
+            self.converter = converter
+            self.types = types
+            self.index = index
+        }
     }
-  }
 }
