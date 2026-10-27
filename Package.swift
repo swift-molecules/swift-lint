@@ -54,7 +54,7 @@ let package = Package(
             url: "https://github.com/swift-atoms/swift-standard-library-extensions.git",
             branch: "main"
         ),
-        .package(url: "https://github.com/swiftlang/swift-syntax", "603.0.2"..<"604.0.0"),
+        .package(url: "https://github.com/swiftlang/swift-syntax", "604.0.0"..<"605.0.0"),
     ],
     targets: [
         .target(
