@@ -64,10 +64,6 @@ let package = Package(
                 .product(name: "Diagnostic", package: "swift-diagnostic"),
                 .product(name: "Cardinal", package: "swift-cardinal"),
                 .product(name: "Tagged", package: "swift-tagged"),
-                .product(
-                    name: "Tagged",
-                    package: "swift-tagged"
-                ),
                 .product(name: "Ownership", package: "swift-ownership"),
                 .product(
                     name: "Standard Library Extensions",
