@@ -86,3 +86,40 @@ extension Lint.Source.Index.Test.Unit {
         #expect(empty.license == .absent)
     }
 }
+
+extension Lint.Source.Index.Test.Unit {
+    @Test
+    func `an import records the identifiers of each enclosing if clause`() {
+        let index = Lint.Source.Index.collect(
+            from: Parser.parse(source: "#if Parser && os(Linux)\n#if Coder\nimport Map\n#endif\n#endif\nimport Span"),
+            path: "Sources/Owner/exports.swift"
+        )
+        let imports = index.imports(under: "Sources/Owner").map(\.import)
+        #expect(imports.map(\.module) == ["Map", "Span"])
+        #expect(imports[0].clauses == [["Parser"], ["Coder"]])
+        #expect(imports[0].guards(among: ["Parser", "Coder"]) == ["Coder"])
+        #expect(!imports[1].isGuarded(by: ["Parser"]))
+        #expect(index.imports(under: "Sources/Other").isEmpty)
+    }
+}
+
+extension Lint.Source.Index.Test.`Edge Case` {
+    @Test
+    func `an else branch or a negated condition guards nothing`() {
+        let index = Lint.Source.Index.collect(
+            from: Parser.parse(source: "#if Parser\n#else\nimport Map\n#endif\n#if !Coder\nimport Span\n#endif"),
+            path: "Sources/Owner/exports.swift"
+        )
+        let imports = index.imports(under: "").map(\.import)
+        #expect(imports.allSatisfy { !$0.isGuarded(by: ["Parser", "Coder"]) })
+    }
+
+    @Test
+    func `canImport names a module, not a trait`() {
+        let index = Lint.Source.Index.collect(
+            from: Parser.parse(source: "#if canImport(Parser)\nimport Parser\n#endif"),
+            path: "Sources/Owner/exports.swift"
+        )
+        #expect(index.imports(under: "Sources")[0].import.isGuarded(by: ["Parser"]) == false)
+    }
+}
