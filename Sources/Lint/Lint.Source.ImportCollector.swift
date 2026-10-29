@@ -15,7 +15,7 @@ extension Lint.Source {
 
         override func visit(_ node: ImportDeclSyntax) -> SyntaxVisitorContinueKind {
             let module = node.path.map(\.name.text).joined(separator: ".")
-            var clauses: [Swift::Set<Swift::String>] = []
+            var clauses: [Lint.Source.Index.Import.Clause] = []
             var current = node.parent
             while let candidate = current {
                 if let clause = candidate.as(IfConfigClauseSyntax.self) {
@@ -28,13 +28,16 @@ extension Lint.Source {
             return .skipChildren
         }
 
-        private static func identifiers(of clause: IfConfigClauseSyntax) -> Swift::Set<Swift::String> {
+        private static func identifiers(of clause: IfConfigClauseSyntax) -> Lint.Source.Index.Import.Clause {
             guard clause.poundKeyword.tokenKind == .poundIf, let condition = clause.condition else {
-                return []
+                return .init(identifiers: [], isConjunction: true)
             }
             let collector = IdentifierCollector(viewMode: .sourceAccurate)
             collector.walk(condition)
-            return collector.negated ? [] : collector.identifiers
+            return .init(
+                identifiers: collector.negated ? [] : collector.identifiers,
+                isConjunction: !collector.disjunctive
+            )
         }
     }
 }
@@ -46,6 +49,13 @@ extension Lint.Source.ImportCollector {
         var identifiers: Swift::Set<Swift::String> = []
 
         var negated = false
+
+        var disjunctive = false
+
+        override func visit(_ node: BinaryOperatorExprSyntax) -> SyntaxVisitorContinueKind {
+            if node.operator.text == "||" { disjunctive = true }
+            return .skipChildren
+        }
 
         override func visit(_ node: DeclReferenceExprSyntax) -> SyntaxVisitorContinueKind {
             identifiers.insert(node.baseName.text)

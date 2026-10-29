@@ -96,9 +96,9 @@ extension Lint.Source.Index.Test.Unit {
         )
         let imports = index.imports(under: "Sources/Owner").map(\.import)
         #expect(imports.map(\.module) == ["Map", "Span"])
-        #expect(imports[0].clauses == [["Parser"], ["Coder"]])
+        #expect(imports[0].clauses.map(\.identifiers) == [["Parser"], ["Coder"]])
         #expect(imports[0].guards(among: ["Parser", "Coder"]) == ["Coder"])
-        #expect(!imports[1].isGuarded(by: ["Parser"]))
+        #expect(!imports[1].isGuarded(by: ["Parser"], among: ["Parser"]))
         #expect(index.imports(under: "Sources/Other").isEmpty)
     }
 }
@@ -111,7 +111,7 @@ extension Lint.Source.Index.Test.`Edge Case` {
             path: "Sources/Owner/exports.swift"
         )
         let imports = index.imports(under: "").map(\.import)
-        #expect(imports.allSatisfy { !$0.isGuarded(by: ["Parser", "Coder"]) })
+        #expect(imports.allSatisfy { !$0.isGuarded(by: ["Parser", "Coder"], among: ["Parser", "Coder"]) })
     }
 
     @Test
@@ -120,6 +120,21 @@ extension Lint.Source.Index.Test.`Edge Case` {
             from: Parser.parse(source: "#if canImport(Parser)\nimport Parser\n#endif"),
             path: "Sources/Owner/exports.swift"
         )
-        #expect(index.imports(under: "Sources")[0].import.isGuarded(by: ["Parser"]) == false)
+        #expect(index.imports(under: "Sources")[0].import.isGuarded(by: ["Parser"], among: ["Parser"]) == false)
+    }
+}
+
+extension Lint.Source.Index.Test.`Edge Case` {
+    @Test
+    func `a conjunction guards on any one identifier, a disjunction only on all`() {
+        let index = Lint.Source.Index.collect(
+            from: Parser.parse(source: "#if Parser && Coder\nimport Map\n#endif\n#if Parser || Coder\nimport Span\n#endif"),
+            path: "Package.swift"
+        )
+        let imports = index.imports(under: "").map(\.import)
+        let names: Swift::Set<Swift::String> = ["Parser", "Coder"]
+        #expect(imports[0].isGuarded(by: ["Parser"], among: names))
+        #expect(!imports[1].isGuarded(by: ["Parser"], among: names))
+        #expect(imports[1].isGuarded(by: names, among: names))
     }
 }
