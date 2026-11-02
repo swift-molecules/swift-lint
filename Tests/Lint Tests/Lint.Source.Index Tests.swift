@@ -54,6 +54,17 @@ extension Lint.Source.Index.Test.`Edge Case` {
     }
 
     @Test
+    func `an actor conforms to Actor, also from an extension in another file`() {
+        let index = Lint.Source.Index.of(
+            "actor Sampler {}",
+            "extension Sampler { func run() {} }",
+            "struct Plain {}"
+        )
+        #expect(index.reachableProtocols(of: "Sampler").contains("Actor"))
+        #expect(!index.reachableProtocols(of: "Plain").contains("Actor"))
+    }
+
+    @Test
     func `a type without conformances witnesses nothing`() {
         let index = Lint.Source.Index.of(
             "public protocol Keyed { associatedtype Key }",

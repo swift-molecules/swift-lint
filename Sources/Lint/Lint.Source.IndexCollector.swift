@@ -69,6 +69,8 @@ extension Lint.Source {
 
         override func visit(_ node: ActorDeclSyntax) -> SyntaxVisitorContinueKind {
             record(Syntax(node), name: node.name, generics: node.genericParameterClause, inheritance: node.inheritanceClause)
+            index.conformances[qualifiedName(node.name.text, Syntax(node)), default: []].insert("Actor")
+            index.conformances[node.name.text, default: []].insert("Actor")
             return .visitChildren
         }
 

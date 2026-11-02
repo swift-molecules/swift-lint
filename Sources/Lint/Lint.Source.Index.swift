@@ -17,6 +17,8 @@ extension Lint.Source {
         /// The `import` declarations of every package file, keyed by its package-relative path.
         public var imports: [Swift::String: [Import]]
 
+        public var documents: Swift::Set<Swift::String>
+
         @inlinable
         public init(
             valueGenericTypes: Swift::Set<Swift::String> = [],
@@ -24,7 +26,8 @@ extension Lint.Source {
             conformances: [Swift::String: Swift::Set<Swift::String>] = [:],
             requirements: [Swift::String: Swift::Set<Swift::String>] = [:],
             license: License = .unread,
-            imports: [Swift::String: [Import]] = [:]
+            imports: [Swift::String: [Import]] = [:],
+            documents: Swift::Set<Swift::String> = []
         ) {
             self.valueGenericTypes = valueGenericTypes
             self.associatedTypes = associatedTypes
@@ -32,6 +35,7 @@ extension Lint.Source {
             self.requirements = requirements
             self.license = license
             self.imports = imports
+            self.documents = documents
         }
     }
 }
@@ -69,6 +73,7 @@ extension Lint.Source.Index {
         requirements.merge(other.requirements) { $0.union($1) }
         if license == .unread { license = other.license }
         imports.merge(other.imports) { $0 + $1 }
+        documents.formUnion(other.documents)
     }
 
     public func protocols(of type: Swift::String) -> Swift::Set<Swift::String> {

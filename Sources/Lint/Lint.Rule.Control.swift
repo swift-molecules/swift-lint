@@ -10,6 +10,7 @@ extension Lint.Rule {
         /// source is observed with: a rule that reads the manifest and the sources together
         /// is controlled by a manifest `source` plus the source files here.
         public let files: [Swift::String: Swift::String]
+        public let documents: Swift::Set<Swift::String>
 
         @inlinable
         public init(
@@ -19,7 +20,8 @@ extension Lint.Rule {
             expectation: Expectation,
             applicability: Lint.Rule.Observation.Applicability = .applicable,
             license: Lint.Source.Index.License = .unread,
-            files: [Swift::String: Swift::String] = [:]
+            files: [Swift::String: Swift::String] = [:],
+            documents: Swift::Set<Swift::String> = []
         ) {
             self.id = id
             self.source = source
@@ -28,6 +30,7 @@ extension Lint.Rule {
             self.applicability = applicability
             self.license = license
             self.files = files
+            self.documents = documents
         }
     }
 }
