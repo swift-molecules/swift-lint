@@ -3,7 +3,9 @@ import SwiftParser
 import SwiftSyntax
 import Testing
 
-extension Lint.Syntax {
+enum `Lint.Syntax Tests` {}
+
+extension `Lint.Syntax Tests` {
     @Suite
     struct Test {
         @Suite struct Unit {}
@@ -15,7 +17,7 @@ extension Lint.Syntax {
     }
 }
 
-extension Lint.Syntax.Test.Identifier {
+extension `Lint.Syntax Tests`.Test.Identifier {
     @Test
     func `Matched pair of backticks is stripped`() {
         #expect(Lint.Syntax.Identifier.unescaped("`Protocol`") == "Protocol")
@@ -42,7 +44,7 @@ extension Lint.Syntax.Test.Identifier {
     }
 }
 
-extension Lint.Syntax.Test.`If Config` {
+extension `Lint.Syntax Tests`.Test.`If Config` {
     @Test
     func `Nested if config inside if config is flattened all the way down`() {
         let source = """
@@ -99,7 +101,7 @@ extension Lint.Syntax.Test.`If Config` {
     }
 }
 
-extension Lint.Syntax.Test.Scope {
+extension `Lint.Syntax Tests`.Test.Scope {
     @Test
     func `Type declared at file scope is top level`() {
         let source = "struct Foo {}"

@@ -2,7 +2,9 @@ import Lint_Test_Support
 import Testing
 import Text
 
-extension Lint.Finding {
+enum `Lint.Finding Tests` {}
+
+extension `Lint.Finding Tests` {
     @Suite
     struct Test {
         @Suite struct Unit {}
@@ -11,7 +13,7 @@ extension Lint.Finding {
     }
 }
 
-extension Lint.Finding.Test.Unit {
+extension `Lint.Finding Tests`.Test.Unit {
 
     private static func fixtureRecord(
         identifier: Swift::String = "fixture rule",

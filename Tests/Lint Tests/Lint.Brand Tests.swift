@@ -4,7 +4,9 @@ import SwiftParser
 import SwiftSyntax
 import Testing
 
-extension Lint.Brand {
+enum `Lint.Brand Tests` {}
+
+extension `Lint.Brand Tests` {
     @Suite
     struct Test {
         @Suite struct Unit {}
@@ -13,7 +15,7 @@ extension Lint.Brand {
     }
 }
 
-extension Lint.Brand.Test {
+extension `Lint.Brand Tests`.Test {
 
     static func parsed(
         _ text: Swift::String,
@@ -37,7 +39,7 @@ extension Lint.Brand.Test {
     }
 }
 
-extension Lint.Brand.Test.Unit {
+extension `Lint.Brand Tests`.Test.Unit {
     @Test
     func `top-level struct name is recognised`() {
         let tree = Parser.parse(source: "public struct Cardinal { public let rawValue: UInt }")
@@ -60,7 +62,7 @@ extension Lint.Brand.Test.Unit {
 
     @Test
     func `owned is true when the run declares a guarded brand`() {
-        let source = Lint.Brand.Test.parsed("let x = c.rawValue", types: ["Cardinal"])
+        let source = `Lint.Brand Tests`.Test.parsed("let x = c.rawValue", types: ["Cardinal"])
 
         let ownedByVocabulary = Lint.Brand.owned(Lint.Brand.vocabulary, in: source)
         let ownedByCardinal = Lint.Brand.owned(["Cardinal"], in: source)
@@ -70,7 +72,7 @@ extension Lint.Brand.Test.Unit {
 
     @Test
     func `owned is false when the run declares no guarded brand`() {
-        let source = Lint.Brand.Test.parsed(
+        let source = `Lint.Brand Tests`.Test.parsed(
             "let x = c.rawValue",
             types: ["SomeConsumerType"]
         )
@@ -87,7 +89,7 @@ extension Lint.Brand.Test.Unit {
     }
 }
 
-extension Lint.Brand.Test.`Edge Case` {
+extension `Lint.Brand Tests`.Test.`Edge Case` {
     @Test
     func `nested type named like a brand is NOT a top-level declaration`() {
 
@@ -99,7 +101,7 @@ extension Lint.Brand.Test.`Edge Case` {
     @Test
     func `unstamped parsed source is never owned`() {
 
-        let source = Lint.Brand.Test.parsed("let x = c.rawValue", types: [])
+        let source = `Lint.Brand Tests`.Test.parsed("let x = c.rawValue", types: [])
         let owned = Lint.Brand.owned(Lint.Brand.vocabulary, in: source)
         #expect(!owned)
     }

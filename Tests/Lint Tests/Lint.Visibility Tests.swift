@@ -3,7 +3,9 @@ import SwiftParser
 import SwiftSyntax
 import Testing
 
-extension Lint.Visibility {
+enum `Lint.Visibility Tests` {}
+
+extension `Lint.Visibility Tests` {
     @Suite
     struct Test {
         @Suite struct Unit {}
@@ -13,7 +15,7 @@ extension Lint.Visibility {
     }
 }
 
-extension Lint.Visibility.Test.Unit {
+extension `Lint.Visibility Tests`.Test.Unit {
     @Test
     func `Comparable orders narrower visibility lower`() {
         #expect(Lint.Visibility.private < .fileprivate)
@@ -39,7 +41,7 @@ extension Lint.Visibility.Test.Unit {
     }
 }
 
-extension Lint.Visibility.Test.Effective {
+extension `Lint.Visibility Tests`.Test.Effective {
     @Test
     func `Bare struct field defaults to internal`() {
         let source = """
@@ -166,7 +168,7 @@ private func findNamedDecl(in node: Syntax, name: Swift::String) -> Syntax? {
     return nil
 }
 
-extension Lint.Visibility.Test.Effective {
+extension `Lint.Visibility Tests`.Test.Effective {
     @Test
     func `Bare member of a public struct is internal`() {
         let source = """

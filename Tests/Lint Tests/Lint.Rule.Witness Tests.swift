@@ -4,7 +4,9 @@ import SwiftParser
 import SwiftSyntax
 import Testing
 
-extension Lint.Rule {
+enum `Lint.Rule Tests` {}
+
+extension `Lint.Rule Tests` {
     @Suite
     struct Test {
         @Suite struct Unit {}
@@ -13,7 +15,7 @@ extension Lint.Rule {
     }
 }
 
-extension Lint.Rule.Test {
+extension `Lint.Rule Tests`.Test {
     fileprivate static func fixture(
         id: Lint.Rule.ID = "suppression fixture",
         suppression: Lint.Rule.Suppression = .none
@@ -31,7 +33,7 @@ extension Lint.Rule.Test {
     }
 }
 
-extension Lint.Rule.Test.Unit {
+extension `Lint.Rule Tests`.Test.Unit {
 
     private func parsedSource(
         _ text: Swift::String,
@@ -118,28 +120,28 @@ extension Lint.Rule.Test.Unit {
 
     @Test
     func `suppression defaults to sanctioning neither directive`() {
-        let suppression = Lint.Rule.Test.fixture().suppression
+        let suppression = `Lint.Rule Tests`.Test.fixture().suppression
         #expect(!suppression.sanctions(.next))
         #expect(!suppression.sanctions(.line))
     }
 
     @Test
     func `next suppression sanctions only the next directive`() {
-        let suppression = Lint.Rule.Test.fixture(suppression: .next).suppression
+        let suppression = `Lint.Rule Tests`.Test.fixture(suppression: .next).suppression
         #expect(suppression.sanctions(.next))
         #expect(!suppression.sanctions(.line))
     }
 
     @Test
     func `line suppression sanctions only the line directive`() {
-        let suppression = Lint.Rule.Test.fixture(suppression: .line).suppression
+        let suppression = `Lint.Rule Tests`.Test.fixture(suppression: .line).suppression
         #expect(!suppression.sanctions(.next))
         #expect(suppression.sanctions(.line))
     }
 
     @Test
     func `both suppression sanctions both directives`() {
-        let suppression = Lint.Rule.Test.require(Lint.Rule.Suppression.both)
+        let suppression = `Lint.Rule Tests`.Test.require(Lint.Rule.Suppression.both)
         #expect(suppression.sanctions(.next))
         #expect(suppression.sanctions(.line))
     }
@@ -155,7 +157,7 @@ extension Lint.Rule.Test.Unit {
 
     @Test
     func `with default preserves suppression policy`() {
-        let original = Lint.Rule.Test.fixture(suppression: .next)
+        let original = `Lint.Rule Tests`.Test.fixture(suppression: .next)
         let promoted = original.with(default: .error)
         #expect(promoted.suppression == original.suppression)
     }
@@ -170,7 +172,7 @@ extension Lint.Rule.Test.Unit {
 
     @Test
     func `pinned to preserves suppression policy`() {
-        let original = Lint.Rule.Test.fixture(suppression: .line)
+        let original = `Lint.Rule Tests`.Test.fixture(suppression: .line)
         let pinned = original.pinned(to: .error)
         #expect(pinned.suppression == original.suppression)
     }
@@ -220,7 +222,7 @@ extension Lint.Rule.Test.Unit {
 
     @Test
     func `filtered to paths preserves suppression policy`() {
-        let original = Lint.Rule.Test.fixture(suppression: .both)
+        let original = `Lint.Rule Tests`.Test.fixture(suppression: .both)
         let scoped = original.filtered(toPaths: .including(["Sources/A"]))
         #expect(scoped.suppression == original.suppression)
     }
@@ -268,10 +270,10 @@ extension Lint.Rule.Test.Unit {
     }
 }
 
-extension Lint.Rule.Test.`Edge Case` {
+extension `Lint.Rule Tests`.Test.`Edge Case` {
     @Test
     func `combining does not infer suppression policy from children`() {
-        let child = Lint.Rule.Test.fixture(suppression: .both)
+        let child = `Lint.Rule Tests`.Test.fixture(suppression: .both)
         let composite = Lint.Rule.combining(
             id: "composite",
             default: .warning,
@@ -284,7 +286,7 @@ extension Lint.Rule.Test.`Edge Case` {
 
     @Test
     func `combining accepts only its explicitly declared suppression policy`() {
-        let child = Lint.Rule.Test.fixture()
+        let child = `Lint.Rule Tests`.Test.fixture()
         let composite = Lint.Rule.combining(
             id: "composite",
             default: .warning,

@@ -1,7 +1,9 @@
 import Lint_Test_Support
 import Testing
 
-extension Lint.Configuration {
+enum `Lint.Configuration Tests` {}
+
+extension `Lint.Configuration Tests` {
     @Suite
     struct Test {
         @Suite struct Unit {}
@@ -10,7 +12,7 @@ extension Lint.Configuration {
     }
 }
 
-extension Lint.Configuration.Test.Unit {
+extension `Lint.Configuration Tests`.Test.Unit {
     @Test
     func `Empty configuration has no rules and no excluded paths`() {
         let config = Lint.Configuration.empty
@@ -49,7 +51,9 @@ extension Lint.Configuration.Test.Unit {
     }
 }
 
-extension Lint.Filter {
+enum `Lint.Filter Tests` {}
+
+extension `Lint.Filter Tests` {
     @Suite
     struct Test {
         @Suite struct Unit {}
@@ -58,7 +62,7 @@ extension Lint.Filter {
     }
 }
 
-extension Lint.Filter.Test.Unit {
+extension `Lint.Filter Tests`.Test.Unit {
     @Test
     func `all filter has no constraints`() {
         let filter = Lint.Filter.all

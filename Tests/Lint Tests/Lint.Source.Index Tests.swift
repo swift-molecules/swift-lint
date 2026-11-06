@@ -3,13 +3,17 @@ import SwiftParser
 import SwiftSyntax
 import Testing
 
-extension Lint.Source.Index {
+enum `Lint.Source.Index Tests` {}
+
+extension `Lint.Source.Index Tests` {
     @Suite
     struct Test {
         @Suite struct Unit {}
         @Suite struct `Edge Case` {}
     }
+}
 
+extension Lint.Source.Index {
     fileprivate static func of(_ files: Swift::String...) -> Self {
         var index = Self()
         for file in files { index.merge(.collect(from: Parser.parse(source: file))) }
@@ -17,7 +21,7 @@ extension Lint.Source.Index {
     }
 }
 
-extension Lint.Source.Index.Test.Unit {
+extension `Lint.Source.Index Tests`.Test.Unit {
     @Test
     func `value generic types are known by simple and qualified name across files`() {
         let index = Lint.Source.Index.of(
@@ -41,7 +45,7 @@ extension Lint.Source.Index.Test.Unit {
     }
 }
 
-extension Lint.Source.Index.Test.`Edge Case` {
+extension `Lint.Source.Index Tests`.Test.`Edge Case` {
     @Test
     func `associated types are inherited through protocol refinement and extension conformances`() {
         let index = Lint.Source.Index.of(
@@ -74,7 +78,7 @@ extension Lint.Source.Index.Test.`Edge Case` {
     }
 }
 
-extension Lint.Source.Index.Test.Unit {
+extension `Lint.Source.Index Tests`.Test.Unit {
     @Test
     func `a member that witnesses a protocol requirement is found`() {
         let index = Lint.Source.Index.of(
@@ -86,7 +90,7 @@ extension Lint.Source.Index.Test.Unit {
     }
 }
 
-extension Lint.Source.Index.Test.Unit {
+extension `Lint.Source.Index Tests`.Test.Unit {
     @Test
     func `a read license survives a merge with files that carry none`() {
         var index = Lint.Source.Index(license: .text("Apache License"))
@@ -98,7 +102,7 @@ extension Lint.Source.Index.Test.Unit {
     }
 }
 
-extension Lint.Source.Index.Test.Unit {
+extension `Lint.Source.Index Tests`.Test.Unit {
     @Test
     func `an import records the identifiers of each enclosing if clause`() {
         let index = Lint.Source.Index.collect(
@@ -114,7 +118,7 @@ extension Lint.Source.Index.Test.Unit {
     }
 }
 
-extension Lint.Source.Index.Test.`Edge Case` {
+extension `Lint.Source.Index Tests`.Test.`Edge Case` {
     @Test
     func `an else branch or a negated condition guards nothing`() {
         let index = Lint.Source.Index.collect(
@@ -135,7 +139,7 @@ extension Lint.Source.Index.Test.`Edge Case` {
     }
 }
 
-extension Lint.Source.Index.Test.`Edge Case` {
+extension `Lint.Source.Index Tests`.Test.`Edge Case` {
     @Test
     func `a conjunction guards on any one identifier, a disjunction only on all`() {
         let index = Lint.Source.Index.collect(
