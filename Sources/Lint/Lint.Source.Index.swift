@@ -49,6 +49,8 @@ extension Lint.Source.Index {
     }
 
     /// The facts of `tree`, plus its imports recorded under `path`.
+    // swift-linter:disable:next raw concept
+    // REASON: A package-relative key whose empty value means the root; Path refuses empty text, and this is compared by prefix, never opened.
     public static func collect(from tree: SourceFileSyntax, path: Swift::String) -> Self {
         var index = collect(from: tree)
         let collector = Lint.Source.ImportCollector(tree: tree)
@@ -59,6 +61,8 @@ extension Lint.Source.Index {
 
     /// The imports of every file under `directory`, a package-relative path without a trailing
     /// separator; the empty path is the package root.
+    // swift-linter:disable:next raw concept
+    // REASON: A package-relative key whose empty value means the root; Path refuses empty text, and this is compared by prefix, never opened.
     public func imports(under directory: Swift::String) -> [(path: Swift::String, import: Import)] {
         let prefix = directory.isEmpty ? "" : directory + "/"
         return imports.keys.sorted().filter { $0.hasPrefix(prefix) }.flatMap { path in
