@@ -11,8 +11,11 @@ extension `Lint.Visibility Tests` {
         @Suite struct Unit {}
         @Suite struct `Edge Case` {}
         @Suite struct Integration {}
-        @Suite struct Effective {}
     }
+}
+
+extension `Lint.Visibility Tests`.Test {
+    @Suite struct Effective {}
 }
 
 extension `Lint.Visibility Tests`.Test.Unit {

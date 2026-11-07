@@ -11,10 +11,15 @@ extension `Lint.Syntax Tests` {
         @Suite struct Unit {}
         @Suite struct `Edge Case` {}
         @Suite struct Integration {}
-        @Suite struct Identifier {}
-        @Suite struct `If Config` {}
-        @Suite struct Scope {}
     }
+}
+
+extension `Lint.Syntax Tests`.Test {
+    @Suite struct Identifier {}
+
+    @Suite struct `If Config` {}
+
+    @Suite struct Scope {}
 }
 
 extension `Lint.Syntax Tests`.Test.Identifier {
