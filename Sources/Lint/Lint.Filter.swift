@@ -32,18 +32,17 @@ extension Lint.Filter {
 
     @inlinable
     public func matches(sourcePath: Lint.Source.Path) -> Swift::Bool {
-        let pathString = sourcePath.underlying
-        if !included.isEmpty {
-            var anyIncluded = false
-            for prefix in included where pathString.hasPrefix(prefix.underlying) {
-                anyIncluded = true
-                break
-            }
-            if !anyIncluded { return false }
-        }
-        for prefix in excluded where pathString.hasPrefix(prefix.underlying) {
+        let path = sourcePath.underlying
+        if !included.isEmpty, !included.contains(where: { Self.contains(path, under: $0) }) {
             return false
         }
-        return true
+        return !excluded.contains { Self.contains(path, under: $0) }
+    }
+
+    @usableFromInline
+    internal static func contains(_ path: Swift::String, under prefix: Prefix) -> Swift::Bool {
+        let directory = prefix.underlying
+        guard !directory.isEmpty, !directory.hasSuffix("/") else { return path.hasPrefix(directory) }
+        return path == directory || path.hasPrefix(directory + "/")
     }
 }

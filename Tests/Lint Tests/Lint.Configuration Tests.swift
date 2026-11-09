@@ -84,3 +84,28 @@ extension `Lint.Filter Tests`.Test.Unit {
         #expect(filter.excluded == ["Tests/Fixtures"])
     }
 }
+
+extension `Lint.Filter Tests`.Test.`Edge Case` {
+    @Test
+    func `a prefix matches whole path components only`() {
+        let filter = Lint.Filter.including(["Sources/A"])
+        #expect(filter.matches(sourcePath: "Sources/A/x.swift"))
+        #expect(filter.matches(sourcePath: "Sources/A"))
+        #expect(!filter.matches(sourcePath: "Sources/AB/x.swift"))
+        #expect(!filter.matches(sourcePath: "Sources/A.swift"))
+    }
+
+    @Test
+    func `an excluded prefix does not exclude a sibling sharing its spelling`() {
+        let filter = Lint.Filter.excluding(["Tests/Fixtures"])
+        #expect(!filter.matches(sourcePath: "Tests/Fixtures/x.swift"))
+        #expect(filter.matches(sourcePath: "Tests/Fixtures Extra/x.swift"))
+    }
+
+    @Test
+    func `a prefix ending in a separator and the empty prefix match by directory`() {
+        #expect(Lint.Filter.including(["Sources/A/"]).matches(sourcePath: "Sources/A/x.swift"))
+        #expect(!Lint.Filter.including(["Sources/A/"]).matches(sourcePath: "Sources/AB/x.swift"))
+        #expect(Lint.Filter.including([""]).matches(sourcePath: "Sources/A/x.swift"))
+    }
+}
