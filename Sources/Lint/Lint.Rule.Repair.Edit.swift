@@ -7,3 +7,15 @@ extension Lint.Rule.Repair {
         case delete(path: Lint.Source.Path)
     }
 }
+
+extension Lint.Rule.Repair.Edit {
+
+    public var paths: [Lint.Source.Path] {
+        switch self {
+        case .rewrite(let path, _), .create(let path, _), .delete(let path):
+            [path]
+        case .move(let source, let destination):
+            [source, destination]
+        }
+    }
+}

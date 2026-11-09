@@ -268,6 +268,72 @@ extension `Lint.Rule Tests`.Test.Unit {
         #expect(effective.first?.rule.id == "sketch_try_optional")
         #expect(effective.first?.severity == .error)
     }
+
+    private func repairing(_ proposal: Lint.Rule.Repair.Proposal) -> Lint.Rule {
+        Lint.Rule(
+            id: "repairing",
+            default: .warning,
+            observe: Lint.Rule.measured { (_: borrowing Lint.Source.Parsed, _) in [] },
+            repair: { (_: borrowing Lint.Source.Parsed) in proposal }
+        )
+    }
+
+    @Test
+    func `combining composes the edits of its children in order`() {
+        let source = parsedSource("let x = 1")
+        let composite = Lint.Rule.combining(
+            id: "composite",
+            default: .warning,
+            [
+                repairing(.edits([.rewrite(path: "Sources/A/a.swift", contents: "a")])),
+                repairing(.unchanged),
+                repairing(.edits([.move(from: "Sources/A/b.swift", to: "Sources/A/c.swift")])),
+            ]
+        )
+        #expect(
+            composite.repair(source)
+                == .edits([
+                    .rewrite(path: "Sources/A/a.swift", contents: "a"),
+                    .move(from: "Sources/A/b.swift", to: "Sources/A/c.swift"),
+                ])
+        )
+    }
+
+    @Test
+    func `combining is unchanged when every child is unchanged`() {
+        let source = parsedSource("let x = 1")
+        let composite = Lint.Rule.combining(
+            id: "composite",
+            default: .warning,
+            [repairing(.unchanged), repairing(.unchanged)]
+        )
+        #expect(composite.repair(source) == .unchanged)
+    }
+
+    @Test
+    func `combining refuses when a child refuses`() {
+        let source = parsedSource("let x = 1")
+        let composite = Lint.Rule.combining(
+            id: "composite",
+            default: .warning,
+            [repairing(.edits([.delete(path: "Sources/A/a.swift")])), Lint.Rule.`sketch noop`]
+        )
+        #expect(composite.repair(source) == .refused(.repairUnavailable))
+    }
+
+    @Test
+    func `combining refuses children whose edits touch the same path`() {
+        let source = parsedSource("let x = 1")
+        let composite = Lint.Rule.combining(
+            id: "composite",
+            default: .warning,
+            [
+                repairing(.edits([.rewrite(path: "Sources/A/a.swift", contents: "a")])),
+                repairing(.edits([.move(from: "Sources/A/a.swift", to: "Sources/A/b.swift")])),
+            ]
+        )
+        #expect(composite.repair(source) == .refused(.ambiguousRepair("Sources/A/a.swift")))
+    }
 }
 
 extension `Lint.Rule Tests`.Test.`Edge Case` {

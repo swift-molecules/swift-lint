@@ -136,6 +136,26 @@ extension Lint.Rule {
                     coverage: .measured,
                     applicability: applicable ? .applicable : .inapplicable
                 )
+            },
+            repair: { (source: borrowing Lint.Source.Parsed) in
+                var edits: [Lint.Rule.Repair.Edit] = []
+                var touched: Swift::Set<Lint.Source.Path> = []
+                for rule in rules {
+                    switch rule.repair(source) {
+                    case .unchanged:
+                        continue
+                    case .refused(let reason):
+                        return .refused(reason)
+                    case .edits(let childEdits):
+                        let paths = Swift::Set(childEdits.flatMap(\.paths))
+                        if let shared = paths.intersection(touched).map(\.underlying).sorted().first {
+                            return .refused(.ambiguousRepair(shared))
+                        }
+                        touched.formUnion(paths)
+                        edits.append(contentsOf: childEdits)
+                    }
+                }
+                return edits.isEmpty ? .unchanged : .edits(edits)
             }
         )
     }
