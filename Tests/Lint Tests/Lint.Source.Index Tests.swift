@@ -153,3 +153,17 @@ extension `Lint.Source.Index Tests`.Test.`Edge Case` {
         #expect(imports[1].isGuarded(by: names, among: names))
     }
 }
+
+extension `Lint.Source.Index Tests`.Test.`Edge Case` {
+    @Test
+    func `types sharing a short name keep apart by qualified name and share facts by short name`() {
+        let index = Lint.Source.Index.of(
+            "extension A { public struct Key: Hashable {} }",
+            "extension B { public struct Key: Comparable {} }"
+        )
+        #expect(index.protocols(of: "A.Key") == ["Hashable"])
+        #expect(index.protocols(of: "B.Key") == ["Comparable"])
+        #expect(index.protocols(of: "Key") == ["Hashable", "Comparable"])
+        #expect(index.protocols(of: "C.Key") == ["Hashable", "Comparable"])
+    }
+}
