@@ -11,6 +11,7 @@ extension Lint.Rule {
         /// is controlled by a manifest `source` plus the source files here.
         public let files: [Swift::String: Swift::String]
         public let documents: Swift::Set<Swift::String>
+        public let packages: Swift::Set<Swift::String>
 
         @inlinable
         public init(
@@ -21,7 +22,8 @@ extension Lint.Rule {
             applicability: Lint.Rule.Observation.Applicability = .applicable,
             license: Lint.Source.Index.License = .unread,
             files: [Swift::String: Swift::String] = [:],
-            documents: Swift::Set<Swift::String> = []
+            documents: Swift::Set<Swift::String> = [],
+            packages: Swift::Set<Swift::String> = []
         ) {
             self.id = id
             self.source = source
@@ -31,6 +33,7 @@ extension Lint.Rule {
             self.license = license
             self.files = files
             self.documents = documents
+            self.packages = packages
         }
     }
 }

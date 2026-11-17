@@ -104,6 +104,15 @@ extension `Lint.Source.Index Tests`.Test.Unit {
 
 extension `Lint.Source.Index Tests`.Test.Unit {
     @Test
+    func `nested package folders survive a merge`() {
+        var index = Lint.Source.Index(packages: ["example-app"])
+        index.merge(Lint.Source.Index(packages: ["example-server"]))
+        #expect(index.packages == ["example-app", "example-server"])
+    }
+}
+
+extension `Lint.Source.Index Tests`.Test.Unit {
+    @Test
     func `an import records the identifiers of each enclosing if clause`() {
         let index = Lint.Source.Index.collect(
             from: Parser.parse(source: "#if Parser && os(Linux)\n#if Coder\nimport Map\n#endif\n#endif\nimport Span"),
