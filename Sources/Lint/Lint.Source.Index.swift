@@ -22,6 +22,9 @@ extension Lint.Source {
         /// The package-relative folders that hold a package of their own: a nested `Package.swift`.
         public var packages: Swift::Set<Swift::String>
 
+        /// Top-level nominal types and protocols declared across the indexed source files.
+        public var declaredTopLevelTypes: Swift::Set<Swift::String>
+
         @inlinable
         public init(
             valueGenericTypes: Swift::Set<Swift::String> = [],
@@ -31,7 +34,8 @@ extension Lint.Source {
             license: License = .unread,
             imports: [Swift::String: [Import]] = [:],
             documents: Swift::Set<Swift::String> = [],
-            packages: Swift::Set<Swift::String> = []
+            packages: Swift::Set<Swift::String> = [],
+            declaredTopLevelTypes: Swift::Set<Swift::String> = []
         ) {
             self.valueGenericTypes = valueGenericTypes
             self.associatedTypes = associatedTypes
@@ -41,6 +45,7 @@ extension Lint.Source {
             self.imports = imports
             self.documents = documents
             self.packages = packages
+            self.declaredTopLevelTypes = declaredTopLevelTypes
         }
     }
 }
@@ -84,6 +89,7 @@ extension Lint.Source.Index {
         imports.merge(other.imports) { $0 + $1 }
         documents.formUnion(other.documents)
         packages.formUnion(other.packages)
+        declaredTopLevelTypes.formUnion(other.declaredTopLevelTypes)
     }
 
     public func protocols(of type: Swift::String) -> Swift::Set<Swift::String> {

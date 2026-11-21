@@ -43,6 +43,19 @@ extension `Lint.Source.Index Tests`.Test.Unit {
         #expect(index.witnessesAssociatedType(named: "HandlerKey", on: "Effect.Exit"))
         #expect(!index.witnessesAssociatedType(named: "Other", on: "Effect.Exit"))
     }
+
+    @Test
+    func `top-level nominal types are recorded across files without nested types`() {
+        let index = Lint.Source.Index.of(
+            "public enum Watercolor {}",
+            "extension Watercolor { public struct Plane {} }",
+            "public struct `Story` { public struct Inner {} }"
+        )
+        #expect(index.declaredTopLevelTypes.contains("Watercolor"))
+        #expect(index.declaredTopLevelTypes.contains("Story"))
+        #expect(!index.declaredTopLevelTypes.contains("Plane"))
+        #expect(!index.declaredTopLevelTypes.contains("Inner"))
+    }
 }
 
 extension `Lint.Source.Index Tests`.Test.`Edge Case` {
