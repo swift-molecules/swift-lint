@@ -51,10 +51,10 @@ extension `Lint.Source.Index Tests`.Test.Unit {
             "extension Watercolor { public struct Plane {} }",
             "public struct `Story` { public struct Inner {} }"
         )
-        #expect(index.declaredTopLevelTypes.contains("Watercolor"))
-        #expect(index.declaredTopLevelTypes.contains("Story"))
-        #expect(!index.declaredTopLevelTypes.contains("Plane"))
-        #expect(!index.declaredTopLevelTypes.contains("Inner"))
+        #expect(index.roots.contains("Watercolor"))
+        #expect(index.roots.contains("Story"))
+        #expect(!index.roots.contains("Plane"))
+        #expect(!index.roots.contains("Inner"))
     }
 }
 

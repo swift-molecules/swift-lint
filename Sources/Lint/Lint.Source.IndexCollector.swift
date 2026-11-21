@@ -35,7 +35,7 @@ extension Lint.Source {
         ) {
             let qualified = qualifiedName(name.text, node)
             if qualified == name.text {
-                index.declaredTopLevelTypes.insert(Lint.Syntax.Identifier.unescaped(name.text))
+                index.roots.insert(Lint.Syntax.Identifier.unescaped(name.text))
             }
             let hasValueGeneric =
                 generics?.parameters.contains { $0.specifier?.tokenKind == .keyword(.let) } ?? false
@@ -85,7 +85,7 @@ extension Lint.Source {
         }
 
         override func visit(_ node: ProtocolDeclSyntax) -> SyntaxVisitorContinueKind {
-            index.declaredTopLevelTypes.insert(Lint.Syntax.Identifier.unescaped(node.name.text))
+            index.roots.insert(Lint.Syntax.Identifier.unescaped(node.name.text))
             let names = node.memberBlock.members.compactMap {
                 $0.decl.as(AssociatedTypeDeclSyntax.self)?.name.text
             }
